@@ -14,6 +14,24 @@
     </div>
 }
 
-<article>
-    @Model.Content
-</article>
+@if (Model.Content.SideBar != null)
+{ 
+    <div class="row">
+        <div class="span8">
+            <article>
+                @Model.Content.Body
+            </article>
+        </div>
+        <div class="span4">
+            <aside class="well">
+                @Model.Content.SideBar
+            </aside>     
+        </div>
+    </div>
+}
+else
+{
+    <article>
+        @Model.Content.Body
+    </article>
+}

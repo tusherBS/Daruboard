@@ -55,16 +55,15 @@ namespace Daruyanagi.Models
         }
 
         private static Markdown markdown = new Markdown();
-        private HtmlString content_cache = null;
-        private DateTime content_cache_at = DateTime.Now;
+        private Content content_cache = new Content(null, null);
 
-        public HtmlString Content
+        public Content Content
         {
             get
             {
                 if (!HttpContext.Current.User.Identity.IsAuthenticated ||
-                    content_cache == null ||
-                    content_cache_at.AddMinutes(5) < DateTime.Now)
+                    content_cache.Body == null ||
+                    content_cache.CreatedAt.AddMinutes(5) < DateTime.Now)
                 {
                     using (var dropbox = new DropBox())
                     {
@@ -76,22 +75,39 @@ namespace Daruyanagi.Models
                         var local_file = Path.Combine(local_dir, Name);
                         var text = File.ReadAllText(local_file);
 
+                        string body = null;
+                        string side_bar = null;
+
                         switch (PageType)
                         {
                             case PageType.Markdown:
-                                text = ProcessFootnotes(text);
-                                text = ProcessBlocks(text);
-                                text = markdown.Transform(text);
-                                
-                                content_cache = new HtmlString(text);
-                                content_cache_at = DateTime.Now;
+                                var content = text.Split(
+                                    new string[] { "\r\n---" },
+                                    StringSplitOptions.RemoveEmptyEntries
+                                );
+
+                                /* SideBar */ if (content.Length > 1) 
+                                {
+                                    side_bar = content[1];
+                                    side_bar = ProcessBlocks(side_bar);
+                                    side_bar = markdown.Transform(side_bar);
+                                }
+
+                                /* Body */ { 
+                                    body = content[0];
+                                    body = ProcessFootnotes(body);
+                                    body = ProcessBlocks(body);
+                                    body = markdown.Transform(body);
+                                }
+
+                                content_cache = new Content(body, side_bar);
                                 break;
 
                             case PageType.Html:
-                                text = ProcessBlocks(text);
+                                body = text;
+                                body = ProcessBlocks(body);
 
-                                content_cache = new HtmlString(text);
-                                content_cache_at = DateTime.Now;
+                                content_cache = new Content(body, side_bar);
                                 break;
 
                             default:
@@ -285,5 +301,18 @@ namespace Daruyanagi.Models
         Unknown,
         Html,
         Markdown,
+    }
+
+    public class Content
+    {
+        public HtmlString Body = null;
+        public HtmlString SideBar = null;
+        public DateTime CreatedAt = DateTime.Now;
+
+        public Content(string body, string side_bar)
+        {
+            if (body != null) Body = new HtmlString(body);
+            if (side_bar != null) SideBar = new HtmlString(side_bar);
+        }
     }
 }
