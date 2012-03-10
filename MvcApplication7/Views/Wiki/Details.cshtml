@@ -1,0 +1,19 @@
+﻿@model Daruyanagi.Models.Page
+
+@{
+    Page.Title = Model.Title;
+    Page.Modified = Model.Modified;
+    Page.Length = Model.Length;
+}
+
+@if (Model.IsDraft)
+{
+    <div class="alert alert-info">
+      <a class="close" data-dismiss="alert">×</a>
+      <strong>Notice</strong> この記事は下書きモードです。ログインしていないユーザーには表示されません。
+    </div>
+}
+
+<article>
+    @Model.Content
+</article>

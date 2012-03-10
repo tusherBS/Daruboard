@@ -1,0 +1,347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>
+    </ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{6682BD06-CF68-4A8D-B0E4-8E716402ACA5}</ProjectGuid>
+    <ProjectTypeGuids>{E53F8FEA-EAE0-44A6-8774-FFD645390401};{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Daruyanagi</RootNamespace>
+    <AssemblyName>Daruboard</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AppLimit.CloudComputing.SharpBox">
+      <HintPath>..\packages\AppLimit.CloudComputing.SharpBox.1.2.0.542\lib\net40-full\AppLimit.CloudComputing.SharpBox.dll</HintPath>
+    </Reference>
+    <Reference Include="AppLimit.CloudComputing.SharpBox.ExperimentalProvider">
+      <HintPath>..\packages\AppLimit.CloudComputing.SharpBox.1.2.0.542\lib\net40-full\AppLimit.CloudComputing.SharpBox.ExperimentalProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="AppLimit.CloudComputing.SharpBox.MockProvider">
+      <HintPath>..\packages\AppLimit.CloudComputing.SharpBox.1.2.0.542\lib\net40-full\AppLimit.CloudComputing.SharpBox.MockProvider.dll</HintPath>
+    </Reference>
+    <Reference Include="DropBoxTokenIssuer">
+      <HintPath>..\packages\AppLimit.CloudComputing.SharpBox.1.2.0.542\lib\net40-full\DropBoxTokenIssuer.exe</HintPath>
+    </Reference>
+    <Reference Include="MarkdownDeep">
+      <HintPath>..\packages\MarkdownDeep.NET.1.4\lib\.NetFramework 3.5\MarkdownDeep.dll</HintPath>
+    </Reference>
+    <Reference Include="MarkdownSharp">
+      <HintPath>..\packages\MarkdownSharp.1.13.0.0\lib\35\MarkdownSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json.Net40">
+      <HintPath>..\packages\AppLimit.CloudComputing.SharpBox.1.2.0.542\lib\net40-full\Newtonsoft.Json.Net40.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Mvc, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.WebPages, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="System.Web.Helpers, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Web.DynamicData" />
+    <Reference Include="System.Web.Entity" />
+    <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Abstractions" />
+    <Reference Include="System.Web.Routing" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.EnterpriseServices" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Controllers\SessionController.cs" />
+    <Compile Include="Controllers\WikiController.cs" />
+    <Compile Include="Controllers\PageController.cs" />
+    <Compile Include="DropBox.cs" />
+    <Compile Include="DynamicJson.cs" />
+    <Compile Include="Extentions\DateTimeExtension.cs" />
+    <Compile Include="Extentions\StringExtention.cs" />
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Libraries\AmazonHelper\AmazonHelper.cs" />
+    <Compile Include="Libraries\AmazonHelper\SignedRequestHelper.cs" />
+    <Compile Include="Libraries\FeedHelper\FeedHelper.cs" />
+    <Compile Include="Libraries\FlickrHelper\FlickrHelper.cs" />
+    <Compile Include="Libraries\HatenaFotolifeHelper\HatenaFotolifeHelper.cs" />
+    <Compile Include="Libraries\IEnumerableSupport.cs" />
+    <Compile Include="Libraries\PagedList\HtmlHelperExtension.cs" />
+    <Compile Include="Libraries\PagedList\IPagedList.cs" />
+    <Compile Include="Libraries\PagedList\PagedList.cs" />
+    <Compile Include="Libraries\TwitterHelper\TwitterHelper.cs" />
+    <Compile Include="Libraries\UriSupport.cs" />
+    <Compile Include="Libraries\YouTubeHelper\YouTubeHelper.cs" />
+    <Compile Include="Models\Page.cs" />
+    <Compile Include="Models\PageRepository.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Content\Amazon2Html.css" />
+    <Content Include="Images\profile.jpg" />
+    <Content Include="Global.asax" />
+    <Content Include="Content\Site.css" />
+    <Content Include="Icons\agenda.png" />
+    <Content Include="Icons\arrow-down.png" />
+    <Content Include="Icons\arrow-left-down.png" />
+    <Content Include="Icons\arrow-left-up.png" />
+    <Content Include="Icons\arrow-left.png" />
+    <Content Include="Icons\arrow-right-down.png" />
+    <Content Include="Icons\arrow-right-up.png" />
+    <Content Include="Icons\arrow-right.png" />
+    <Content Include="Icons\arrow-up.png" />
+    <Content Include="Icons\badge.png" />
+    <Content Include="Icons\bag.png" />
+    <Content Include="Icons\bass-speaker.png" />
+    <Content Include="Icons\battery-1.png" />
+    <Content Include="Icons\battery-2.png" />
+    <Content Include="Icons\battery-3.png" />
+    <Content Include="Icons\battery-4.png" />
+    <Content Include="Icons\beer-mug.png" />
+    <Content Include="Icons\binoculars.png" />
+    <Content Include="Icons\book.png" />
+    <Content Include="Icons\bookmark.png" />
+    <Content Include="Icons\bug.png" />
+    <Content Include="Icons\bulb.png" />
+    <Content Include="Icons\buoy.png" />
+    <Content Include="Icons\calculator.png" />
+    <Content Include="Icons\calendar.png" />
+    <Content Include="Icons\car.png" />
+    <Content Include="Icons\cart.png" />
+    <Content Include="Icons\cassette.png" />
+    <Content Include="Icons\cd-dvd.png" />
+    <Content Include="Icons\champion-cup.png" />
+    <Content Include="Icons\chip.png" />
+    <Content Include="Icons\clip.png" />
+    <Content Include="Icons\clipboard.png" />
+    <Content Include="Icons\clock.png" />
+    <Content Include="Icons\closed-lock.png" />
+    <Content Include="Icons\cloud.png" />
+    <Content Include="Icons\cocktail.png" />
+    <Content Include="Icons\coffe-mug.png" />
+    <Content Include="Icons\coffee-cup.png" />
+    <Content Include="Icons\collapse.png" />
+    <Content Include="Icons\comment.png" />
+    <Content Include="Icons\credit-card.png" />
+    <Content Include="Icons\cronometer.png" />
+    <Content Include="Icons\document.png" />
+    <Content Include="Icons\drop.png" />
+    <Content Include="Icons\empty-clipboard.png" />
+    <Content Include="Icons\envelope.png" />
+    <Content Include="Icons\expand.png" />
+    <Content Include="Icons\eye.png" />
+    <Content Include="Icons\facebook.png" />
+    <Content Include="Icons\first-aid-kit.png" />
+    <Content Include="Icons\flag.png" />
+    <Content Include="Icons\floppy-disc.png" />
+    <Content Include="Icons\flower.png" />
+    <Content Include="Icons\folder.png" />
+    <Content Include="Icons\game-boy.png" />
+    <Content Include="Icons\gas.png" />
+    <Content Include="Icons\gear.png" />
+    <Content Include="Icons\gift.png" />
+    <Content Include="Icons\glass.png" />
+    <Content Include="Icons\globe-1.png" />
+    <Content Include="Icons\globe-2.png" />
+    <Content Include="Icons\hard-disk.png" />
+    <Content Include="Icons\headphones.png" />
+    <Content Include="Icons\heart.png" />
+    <Content Include="Icons\id.png" />
+    <Content Include="Icons\industry.png" />
+    <Content Include="Icons\info.png" />
+    <Content Include="Icons\iphone.png" />
+    <Content Include="Icons\ipod.png" />
+    <Content Include="Icons\joystick.png" />
+    <Content Include="Icons\key.png" />
+    <Content Include="Icons\keyboard.png" />
+    <Content Include="Icons\lab.png" />
+    <Content Include="Icons\laptop.png" />
+    <Content Include="Icons\leaf.png" />
+    <Content Include="Icons\lollipop.png" />
+    <Content Include="Icons\magnifying-glass.png" />
+    <Content Include="Icons\man-user.png" />
+    <Content Include="Icons\memory-card.png" />
+    <Content Include="Icons\microphone.png" />
+    <Content Include="Icons\mobile-phone.png" />
+    <Content Include="Icons\monitor.png" />
+    <Content Include="Icons\moon.png" />
+    <Content Include="Icons\mouse.png" />
+    <Content Include="Icons\movie-film.png" />
+    <Content Include="Icons\music-note.png" />
+    <Content Include="Icons\network-socket.png" />
+    <Content Include="Icons\news.png" />
+    <Content Include="Icons\opened-envelope.png" />
+    <Content Include="Icons\opened-lock.png" />
+    <Content Include="Icons\pen.png" />
+    <Content Include="Icons\pencil.png" />
+    <Content Include="Icons\phone-1.png" />
+    <Content Include="Icons\phone-2.png" />
+    <Content Include="Icons\photography-camera.png" />
+    <Content Include="Icons\photography-film.png" />
+    <Content Include="Icons\photography.png" />
+    <Content Include="Icons\planet.png" />
+    <Content Include="Icons\plug.png" />
+    <Content Include="Icons\podcast.png" />
+    <Content Include="Icons\pointing-down.png" />
+    <Content Include="Icons\pointing-left.png" />
+    <Content Include="Icons\pointing-right.png" />
+    <Content Include="Icons\pointing-up.png" />
+    <Content Include="Icons\print.png" />
+    <Content Include="Icons\projector.png" />
+    <Content Include="Icons\pushpin-1.png" />
+    <Content Include="Icons\pushpin-2.png" />
+    <Content Include="Icons\puzzle.png" />
+    <Content Include="Icons\quote.png" />
+    <Content Include="Icons\radio.png" />
+    <Content Include="Icons\refresh.png" />
+    <Content Include="Icons\restaurant.png" />
+    <Content Include="Icons\router.png" />
+    <Content Include="Icons\rss.png" />
+    <Content Include="Icons\satelite.png" />
+    <Content Include="Icons\scissors.png" />
+    <Content Include="Icons\server.png" />
+    <Content Include="Icons\share.png" />
+    <Content Include="Icons\shield.png" />
+    <Content Include="Icons\sign-post.png" />
+    <Content Include="Icons\skull.png" />
+    <Content Include="Icons\snow-flake.png" />
+    <Content Include="Icons\speaker.png" />
+    <Content Include="Icons\star.png" />
+    <Content Include="Icons\suitcase.png" />
+    <Content Include="Icons\sun.png" />
+    <Content Include="Icons\surveillance-camera.png" />
+    <Content Include="Icons\tag.png" />
+    <Content Include="Icons\thumbs-down.png" />
+    <Content Include="Icons\thumbs-up.png" />
+    <Content Include="Icons\thunder.png" />
+    <Content Include="Icons\tools.png" />
+    <Content Include="Icons\traffic-cone.png" />
+    <Content Include="Icons\trash.png" />
+    <Content Include="Icons\tree.png" />
+    <Content Include="Icons\truck.png" />
+    <Content Include="Icons\tv.png" />
+    <Content Include="Icons\twitter-bird.png" />
+    <Content Include="Icons\twitter.png" />
+    <Content Include="Icons\umbrella.png" />
+    <Content Include="Icons\usb.png" />
+    <Content Include="Icons\user.png" />
+    <Content Include="Icons\video-camera.png" />
+    <Content Include="Icons\virus.png" />
+    <Content Include="Icons\wall-socket-1.png" />
+    <Content Include="Icons\wall-socket-2.png" />
+    <Content Include="Icons\wallet.png" />
+    <Content Include="Icons\webcam.png" />
+    <Content Include="Icons\window.png" />
+    <Content Include="Icons\woman-user.png" />
+    <Content Include="Icons\zoom-in.png" />
+    <Content Include="Icons\zoom-out.png" />
+    <Content Include="README.jQuery.vsdoc.txt" />
+    <Content Include="Scripts\jquery-1.7.1-vsdoc.js" />
+    <Content Include="Scripts\jquery-1.7.1.js" />
+    <Content Include="Scripts\jquery-1.7.1.min.js" />
+    <Content Include="Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Scripts\jquery.validate.js" />
+    <Content Include="Scripts\jquery.validate.min.js" />
+    <Content Include="Scripts\modernizr-2.0.6-development-only.js" />
+    <Content Include="Web.config">
+      <SubType>Designer</SubType>
+    </Content>
+    <Content Include="Web.Debug.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Web.Release.config">
+      <DependentUpon>Web.config</DependentUpon>
+    </Content>
+    <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
+    <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\MicrosoftAjax.js" />
+    <Content Include="Scripts\MicrosoftAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.js" />
+    <Content Include="Scripts\MicrosoftMvcAjax.debug.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.js" />
+    <Content Include="Scripts\MicrosoftMvcValidation.debug.js" />
+    <Content Include="Views\Web.config" />
+    <Content Include="Views\_ViewStart.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Page\Index.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App_Data\DropBoxToken">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <Content Include="Views\Wiki\Details.cshtml" />
+    <None Include="Icons\Thumbs.db" />
+    <Content Include="Views\Page\Create.cshtml" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target> -->
+  <Target Name="MvcBuildViews" AfterTargets="AfterBuild" Condition="'$(MvcBuildViews)'=='true'">
+    <AspNetCompiler VirtualPath="temp" PhysicalPath="$(WebProjectOutputDir)" />
+  </Target>
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>54919</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>
+          </IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>False</UseCustomServer>
+          <CustomServerUrl>
+          </CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

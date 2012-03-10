@@ -1,0 +1,33 @@
+/*
+daruyanagi.net Amazon2Html Stylesheet
+v1.0
+2011-11-05
+Author: daruyanagi - http://daruyanagi.net/
+*/
+
+.amazon-goods {
+/*  background-color: #e9e9e9; */
+    overflow: hidden;
+}
+
+.amazon-goods dl {
+    float: left;
+    margin: 20px !important;
+}
+
+.amazon-goods dt {
+    display: none;
+}
+
+.amazon-goods dd {
+    max-width: 420px;
+}
+
+.amazon-goods-image {
+    float: left;
+    margin: 20px !important;
+}
+
+.error {
+    color: red;
+}

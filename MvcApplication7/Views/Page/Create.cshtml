@@ -1,0 +1,61 @@
+﻿@model Daruyanagi.Models.Page
+
+@{
+    Page.Title = "Create";
+}
+
+<script src="@Url.Content("~/Scripts/jquery.validate.min.js")" type="text/javascript"></script>
+<script src="@Url.Content("~/Scripts/jquery.validate.unobtrusive.min.js")" type="text/javascript"></script>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary(true)
+
+<fieldset>
+    <legend>ページの新規作成</legend>
+    <div class="control-group">
+        @Html.LabelFor(model => model.Name)
+        <div class="controls">
+            @Html.EditorFor(model => model.Name)
+            <p class="help-block">@Html.ValidationMessageFor(model => model.Name)</p>
+        </div>
+    </div>
+    <div class="control-group">
+        @Html.LabelFor(model => model.Content)
+        <div class="controls">
+            @Html.TextAreaFor(model => model.Content)
+            <p class="help-block">@Html.ValidationMessageFor(model => model.Content)</p>
+        </div>
+    </div>
+
+    <p class="form-actions">
+        <input type="submit" value="保存して公開" class="btn btn-primary" />
+        @Html.ActionLink("下書きとして保存", "Details", "Wiki", new { @class = "btn" })
+        @Html.ActionLink("キャンセル", "Details", "Wiki", new { @class = "btn" })
+    </p>
+</fieldset>
+}
+
+<style>
+#Name, #Content
+{
+    width: 70%;
+}
+</style>
+
+<script>
+    $(function () {
+        $('form').addClass("form-horizontal");
+        $('label').addClass("control-label");
+        $('input').addClass("input-xlarge");
+        $('textarea').addClass("input-xlarge");
+
+        $(document).ready(function () {
+            $('#Content').height($('#Content').height() + $(window).height() - $('body').height() - 100);
+        });
+
+        $(window).resize(function () {
+            $('#Content').height($('#Content').height() + $(window).height() - $('body').height() - 100);
+        });
+    });
+</script>

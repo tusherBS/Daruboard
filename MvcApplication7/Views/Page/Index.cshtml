@@ -1,0 +1,14 @@
+﻿@model List<Daruyanagi.Models.Page>
+
+@{
+    Page.Title = "Archives";
+    Page.Modified = DateTime.Now;
+    Page.Length = "-";
+}
+
+<ul>
+@foreach (var item in Model)
+{
+    <li>@Html.ActionLink(item.Title, "Details", new { Controller = "Wiki", title = item.Title }) (@item.Modified)</li>
+}
+</ul>
