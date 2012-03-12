@@ -61,9 +61,8 @@ namespace Daruyanagi.Models
         {
             get
             {
-                if (!HttpContext.Current.User.Identity.IsAuthenticated ||
-                    content_cache.Body == null ||
-                    content_cache.CreatedAt.AddMinutes(5) < DateTime.Now)
+                if (HttpContext.Current.User.Identity.IsAuthenticated ||
+                    !content_cache.IsValid || content_cache.CreatedAt < Modified)
                 {
                     using (var dropbox = new DropBox())
                     {
@@ -82,7 +81,7 @@ namespace Daruyanagi.Models
                         {
                             case PageType.Markdown:
                                 var content = text.Split(
-                                    new string[] { "\r\n---" },
+                                    new string[] { "\r\n---\r\n" },
                                     StringSplitOptions.RemoveEmptyEntries
                                 );
 
@@ -314,5 +313,7 @@ namespace Daruyanagi.Models
             if (body != null) Body = new HtmlString(body);
             if (side_bar != null) SideBar = new HtmlString(side_bar);
         }
+
+        public bool IsValid { get { return Body != null; } }
     }
 }

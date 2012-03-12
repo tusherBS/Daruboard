@@ -39,7 +39,7 @@ namespace Daruyanagi.Controllers
                             + "/" + p.Title;
                     return new SyndicationItem(
                         p.Title,
-                        p.Content.ToString(),
+                        p.Content.Body.ToString(),
                         new Uri(url),
                         url,
                         p.Modified
