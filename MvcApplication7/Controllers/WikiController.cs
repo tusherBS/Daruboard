@@ -34,7 +34,7 @@ namespace Daruyanagi.Controllers
 
             var feed = new SyndicationFeed(
                 AppName, AppDescription, Request.Url, AppName, DateTime.Now,
-                pages.Select(p => {
+                pages.Take(10).Select(p => {
                     var url = Request.Url.GetLeftPart(UriPartial.Authority)
                             + "/" + p.Title;
                     return new SyndicationItem(
