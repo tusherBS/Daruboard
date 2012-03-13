@@ -266,16 +266,18 @@ namespace Daruyanagi.Models
             if (string.IsNullOrEmpty(text)) return text;
 
             var matches = R_FOOTNOTES.Matches(text);
-            var footnotes = new List<string>();
 
-            foreach (Match m in matches)
-            {
-                footnotes.Add(string.Format(
+            var notes = R_FOOTNOTES.Matches(text)
+                .Cast<Match>()
+                .Select(m => string.Format(
                     "<li id='footnote-{0}'>{1} (<a href='#note-{0}'>*</a>)</li>",
-                    m.Index, m.Groups["value"].ToString()));
-            }
+                    m.Index, m.Groups["value"].ToString()
+                )
+            );
 
-            var footnote = "<ol class='post-footnote'>\r\n" + string.Join("\r\n", footnotes) + "</ol>";
+            var footnote = string.Format(
+                "<ol class='post-footnote'>\r\n{0}</ol>",
+                string.Join("\r\n", notes));
 
             var index = 0;
 
@@ -306,7 +308,7 @@ namespace Daruyanagi.Models
     {
         public HtmlString Body = null;
         public HtmlString SideBar = null;
-        public DateTime CreatedAt = DateTime.Now;
+        public readonly DateTime CreatedAt = DateTime.Now;
 
         public Content(string body, string side_bar)
         {
