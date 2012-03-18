@@ -22,7 +22,7 @@ namespace Daruyanagi.Models
         {
             Name = entry.Name;
             Length = entry.Length;
-            Modified = entry.Modified;
+            Modified = entry.Modified.ToLocalTime();
         }
 
         public string Name { get; set; }

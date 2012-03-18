@@ -50,7 +50,7 @@ namespace Daruyanagi
 
         }
 
-        public static string PhysicalDir;
+        public static string PhysicalDir { get; private set; }
 
         public static string Domain
         {

@@ -13,7 +13,7 @@ namespace Daruyanagi.Models
     {
         private static Timer mTimer = new Timer(5 * 60 * 1000);
         private static List<Page> pages = GetPageList();
-        private static DateTime UpdatedAt = DateTime.Now;
+        public static DateTime UpdatedAt = DateTime.Now;
 
         static PageRepository()
         {
