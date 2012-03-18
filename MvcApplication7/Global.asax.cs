@@ -51,12 +51,18 @@ namespace Daruyanagi
         }
 
         public static string PhysicalDir;
-        public static string Domain;
+
+        public static string Domain
+        {
+            get
+            {
+                return HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
+            }
+        }
 
         protected void Application_Start()
         {
             PhysicalDir = HttpContext.Current.Server.MapPath("/");
-            Domain = HttpContext.Current.Request.Url.GetLeftPart(UriPartial.Authority);
 
             AreaRegistration.RegisterAllAreas();
 
