@@ -6,6 +6,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Xml;
 using System.ServiceModel.Syndication;
+using System.Web.Caching;
 
 namespace Daruyanagi
 {
@@ -17,6 +18,24 @@ namespace Daruyanagi
         }
 
         public static string GetHtml(string url, int count)
+        {
+            var cache_key = string.Format("{0}_{1}_{2}", "feed", url, count);
+
+            var cache = (string) HttpRuntime.Cache.Get(cache_key);
+            if (cache == null)
+            {
+                cache = BuildCache(url, count);
+                HttpRuntime.Cache.Insert(
+                    cache_key, cache, null,
+                    DateTime.UtcNow.AddHours(1),
+                    Cache.NoSlidingExpiration
+                );
+            }
+
+            return cache;
+        }
+
+        private static string BuildCache(string url, int count)
         {
             var div = new TagBuilder("div");
             div.Attributes.Add("class", "feed");
@@ -41,7 +60,7 @@ namespace Daruyanagi
                         a.InnerHtml = i.Title.Text;
 
                         var li = new TagBuilder("li");
-                        if (i.LastUpdatedTime.AddDays(1) > DateTime.Now) 
+                        if (i.LastUpdatedTime.AddDays(1) > DateTime.Now)
                             li.InnerHtml += "<span class='label label-success'>New</span>";
                         li.InnerHtml += a.ToString();
                         ul.InnerHtml += li.ToString();

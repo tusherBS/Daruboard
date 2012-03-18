@@ -7,6 +7,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using MarkdownSharp;
 using AppLimit.CloudComputing.SharpBox;
+using System.Web.Caching;
 
 namespace Daruyanagi.Models
 {
@@ -205,20 +206,10 @@ namespace Daruyanagi.Models
                         }
 
                     case "updates":
-                        var pages = new PageRepository().List(false)
-                            .OrderByDescending(_ => _.Modified)
-                            .Take((p.Count() < 3) ? 10 : int.Parse(p[2]));
+                        var count = (p.Count() < 3) ? 10 : int.Parse(p[2]);
+                        var feed = MvcApplication.Domain + "/Feed";
 
-                        var tag = string.Join("\r\n", pages.Select(_ =>
-                            string.Format(
-                                "<li>{0}<a href='/{1}'>{1}</a> ({2})</li>",
-                                _.Modified.AddDays(1) > DateTime.Now
-                                    ? "<span class='label label-success'>New</span>"
-                                    : string.Empty,
-                                _.Title, _.Modified
-                            )
-                        ));
-                        return string.Format("<ul class='updates'>{0}</ul>", tag);
+                        return FeedHelper.GetHtml(feed, count);
 
                     case "label":
                         var label_text = (p.Count() < 2) ? "Default" : p[1];
@@ -242,7 +233,7 @@ namespace Daruyanagi.Models
                     default:
                         string url = p[0];
                         string title = p.Count() > 1 ? p[1] : url;
-                        return string.Format("[{0}]({1})", title, url);
+                        return string.Format("<a href='{0}' title='{1}'>{1}</a>", url, title);
                 }
             }
             catch (Exception e)
@@ -265,8 +256,6 @@ namespace Daruyanagi.Models
         {
             if (string.IsNullOrEmpty(text)) return text;
 
-            var matches = R_FOOTNOTES.Matches(text);
-
             var notes = R_FOOTNOTES.Matches(text)
                 .Cast<Match>()
                 .Select(m => string.Format(
@@ -275,13 +264,13 @@ namespace Daruyanagi.Models
                 )
             );
 
+            if (notes.Count() == 0) return text;
+
             var footnote = string.Format(
                 "<ol class='post-footnote'>\r\n{0}</ol>",
                 string.Join("\r\n", notes));
 
-            var index = 0;
-
-            text = R_FOOTNOTES.Replace(text, delegate(Match match)
+            var index = 0; text = R_FOOTNOTES.Replace(text, (match) =>
             {
                 return string.Format(
                     "<sup id='note-{0}' class='note'><a href='#footnote-{0}' title='{1}'>[{2}]</a></sup>",

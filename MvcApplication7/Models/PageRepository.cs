@@ -5,17 +5,46 @@ using System.Web;
 
 using System.IO;
 using AppLimit.CloudComputing.SharpBox;
+using System.Timers;
 
 namespace Daruyanagi.Models
 {
-    public class PageRepository
+    public static class PageRepository
     {
-        public Page Find(string title)
+        private static Timer mTimer = new Timer(5 * 60 * 1000);
+        private static List<Page> pages = GetPageList();
+        private static DateTime UpdatedAt = DateTime.Now;
+
+        static PageRepository()
+        {
+            mTimer.Elapsed += new ElapsedEventHandler(mTimer_Elapsed);
+            mTimer.Start();
+        }
+
+        static void mTimer_Elapsed(object sender, ElapsedEventArgs e)
+        {
+            pages = GetPageList();
+            UpdatedAt = DateTime.Now;
+        }
+
+        static List<Page> GetPageList()
+        {
+            using (var dropbox = new DropBox())
+            {
+                return dropbox["/Archives"]
+                    .Where(_ => _ is ICloudFileSystemEntry)
+                    .OrderByDescending(_ => _.Modified)
+                    .Select(_ => new Page(_))
+                    .ToList();
+            }
+        }
+
+        public static Page Find(string title)
         {
             return Find(title, HttpContext.Current.User.Identity.IsAuthenticated);
         }
 
-        public Page Find(string title, bool include_draft = false)
+        public static Page Find(string title, bool include_draft = false)
         {
             var pages = List(include_draft)
                 .Where(p => p.Title == title)
@@ -23,44 +52,22 @@ namespace Daruyanagi.Models
                 .OrderBy(p => p.Name);
 
             if (pages.Count() < 1)
-                throw new FileNotFoundException();
+                throw new HttpException(404, "Page is not found.");
             else
                 return pages.First();
         }
 
-        private static List<Page> list_cache = null;
-        private static DateTime list_cached_at = DateTime.Now;
-
-        public List<Page> List()
+        public static List<Page> List()
         {
-            return List(
-                HttpContext.Current.User.Identity.IsAuthenticated,
-                !HttpContext.Current.User.Identity.IsAuthenticated);
+            return List(HttpContext.Current.User.Identity.IsAuthenticated);
         }
 
-        public List<Page> List(bool include_draft = false, bool cache_enabled = true)
+        public static List<Page> List(bool include_draft = false)
         {
-            if (cache_enabled == false || 
-                list_cache == null || 
-                list_cached_at.AddMinutes(5) < DateTime.Now)
-            {
-                using (var dropbox = new DropBox())
-                {
-                    var archives = dropbox["/Archives"];
-
-                    list_cache = archives
-                        .Where(_ => _ is ICloudFileSystemEntry)
-                        .OrderByDescending(_ => _.Modified)
-                        .Select(_ => new Page(_))
-                        .ToList();
-                    list_cached_at = DateTime.Now;
-                }
-            }
-
             if (include_draft)
-                return list_cache;
+                return pages;
             else
-                return list_cache.Where(p => !p.IsDraft).ToList();
+                return pages.Where(p => !p.IsDraft).ToList();
         }
     }
 }

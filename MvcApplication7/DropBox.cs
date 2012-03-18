@@ -19,7 +19,7 @@ namespace Daruyanagi
 
         public ICloudDirectoryEntry Root { get { return Storage.GetRoot(); } }
 
-        public DropBox() : this("~/App_Data/DropBoxToken")
+        public DropBox() : this("App_Data/DropBoxToken")
         {
 
         }
@@ -33,7 +33,7 @@ namespace Daruyanagi
         public ICloudStorageAccessToken GetAccessToken(string path)
         {
             using (var f = File.Open(
-                HttpContext.Current.Server.MapPath(path),
+                Path.Combine(MvcApplication.PhysicalDir, path),
                 FileMode.Open, FileAccess.Read, FileShare.Read))
             {
                 return Storage.DeserializeSecurityToken(f);

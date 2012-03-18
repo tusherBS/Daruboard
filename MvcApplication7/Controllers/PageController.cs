@@ -11,14 +11,12 @@ namespace Daruyanagi.Controllers
 {
     public class PageController : Controller
     {
-        private PageRepository repository = new PageRepository();
-
         //
         // GET: /Page/
 
         public ActionResult Index()
         {
-            var pages = repository.List();
+            var pages = PageRepository.List();
 
             return View(pages);
         }
