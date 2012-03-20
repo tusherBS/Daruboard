@@ -7,12 +7,13 @@ using System.IO;
 using System.Text.RegularExpressions;
 using MarkdownSharp;
 using AppLimit.CloudComputing.SharpBox;
-using System.Web.Caching;
 
 namespace Daruyanagi.Models
 {
     public class Page
     {
+        private static Markdown markdown = new Markdown();
+
         private Page()
         {
 
@@ -55,71 +56,6 @@ namespace Daruyanagi.Models
             }
         }
 
-        private static Markdown markdown = new Markdown();
-        private Content content_cache = new Content(null, null);
-
-        public Content Content
-        {
-            get
-            {
-                if (HttpContext.Current.User.Identity.IsAuthenticated ||
-                    !content_cache.IsValid || content_cache.CreatedAt < Modified)
-                {
-                    using (var dropbox = new DropBox())
-                    {
-                        var remote_file = string.Format("/Archives/{0}", Name);
-
-                        var local_dir = Path.GetTempPath();
-                        dropbox.Storage.DownloadFile(remote_file, local_dir);
-
-                        var local_file = Path.Combine(local_dir, Name);
-                        var text = File.ReadAllText(local_file);
-
-                        string body = null;
-                        string side_bar = null;
-
-                        switch (PageType)
-                        {
-                            case PageType.Markdown:
-                                var content = text.Split(
-                                    new string[] { "\r\n---\r\n" },
-                                    StringSplitOptions.RemoveEmptyEntries
-                                );
-
-                                /* SideBar */ if (content.Length > 1) 
-                                {
-                                    side_bar = content[1];
-                                    side_bar = ProcessBlocks(side_bar);
-                                    side_bar = markdown.Transform(side_bar);
-                                }
-
-                                /* Body */ { 
-                                    body = content[0];
-                                    body = ProcessFootnotes(body);
-                                    body = ProcessBlocks(body);
-                                    body = markdown.Transform(body);
-                                }
-
-                                content_cache = new Content(body, side_bar);
-                                break;
-
-                            case PageType.Html:
-                                body = text;
-                                body = ProcessBlocks(body);
-
-                                content_cache = new Content(body, side_bar);
-                                break;
-
-                            default:
-                                content_cache = null;
-                                throw new Exception("コンテンツタイプが不明です。");
-                        }
-                    }
-                }
-                return content_cache;
-            }
-        }
-
         public DateTime Modified { get; set; }
 
         public long Length { get; set; }
@@ -127,6 +63,80 @@ namespace Daruyanagi.Models
         public bool IsDraft
         {
             get { return Title.StartsWith("_"); }
+        }
+
+        public Content Content
+        {
+            get
+            {
+                var cache_key = string.Format("{0}: {1}", "content", Name);
+                var cache = (Content) HttpRuntime.Cache.Get(cache_key);
+
+                if (cache == null || cache.CreatedAt < Modified ||
+                    HttpContext.Current.User.Identity.IsAuthenticated)
+                {
+                    cache = BuildContentCache();
+                    HttpRuntime.Cache.Insert(cache_key, cache, null, 
+                        DateTime.UtcNow.AddHours(1),
+                        System.Web.Caching.Cache.NoSlidingExpiration
+                    );
+                }
+
+                return cache;
+            }
+        }
+
+        private Content BuildContentCache()
+        {
+            using (var dropbox = new DropBox())
+            {
+                var remote_file = string.Format("/Archives/{0}", Name);
+
+                var local_dir = Path.GetTempPath();
+                dropbox.Storage.DownloadFile(remote_file, local_dir);
+
+                var local_file = Path.Combine(local_dir, Name);
+                var text = File.ReadAllText(local_file);
+
+                string body = null;
+                string side_bar = null;
+
+                switch (PageType)
+                {
+                    case PageType.Markdown:
+                        var content = text.Split(
+                            new string[] { "\r\n---\r\n" },
+                            StringSplitOptions.RemoveEmptyEntries
+                        );
+
+                        /* SideBar */
+                        if (content.Length > 1)
+                        {
+                            side_bar = content[1];
+                            side_bar = ProcessBlocks(side_bar);
+                            side_bar = markdown.Transform(side_bar);
+                        }
+
+                        /* Body */
+                        {
+                            body = content[0];
+                            body = ProcessFootnotes(body);
+                            body = ProcessBlocks(body);
+                            body = markdown.Transform(body);
+                        }
+
+                        return new Content(body, side_bar);
+
+                    case PageType.Html:
+                        body = text;
+                        body = ProcessBlocks(body);
+
+                        return new Content(body, side_bar);
+
+                    default:
+                        throw new Exception("コンテンツタイプが不明です。");
+                }
+            }
         }
 
         //---

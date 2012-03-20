@@ -99,7 +99,9 @@
       <hr>
 
       <footer>
-        <p>&copy; @App.Author 2012. Archive List was updated at @Daruyanagi.Models.PageRepository.UpdatedAt</p>
+        <p>&copy; @App.Author 2012. 
+        Archive Cached: @Daruyanagi.Models.PageRepository.UpdatedAt
+        @RenderSection("PageCached", false)</p>
       </footer>
 
     </div> <!-- /container -->

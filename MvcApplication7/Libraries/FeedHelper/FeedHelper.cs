@@ -19,7 +19,7 @@ namespace Daruyanagi
 
         public static string GetHtml(string url, int count)
         {
-            var cache_key = string.Format("{0}_{1}_{2}", "feed", url, count);
+            var cache_key = string.Format("{0}: {1}, {2}", "feed", url, count);
 
             var cache = (string) HttpRuntime.Cache.Get(cache_key);
             if (cache == null)
