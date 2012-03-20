@@ -207,7 +207,7 @@ namespace Daruyanagi.Models
 
                     case "updates":
                         var count = (p.Count() < 3) ? 10 : int.Parse(p[2]);
-                        var feed = MvcApplication.Domain + "/Feed";
+                        var feed = MvcApplication.Domain + "/Feed?show_content=false";
 
                         return FeedHelper.GetHtml(feed, count);
 

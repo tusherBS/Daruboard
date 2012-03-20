@@ -26,7 +26,7 @@ namespace Daruyanagi.Controllers
             return View(page);
         }
 
-        public ActionResult Feed(string title, int count = 10)
+        public ActionResult Feed(string title, int count = 10, bool show_content = true)
         {
             var pages = PageRepository.List().Take(count);
 
@@ -36,7 +36,7 @@ namespace Daruyanagi.Controllers
                     var url = MvcApplication.Domain + "/" + p.Title;
                     return new SyndicationItem(
                         p.Title,
-                        p.Content.Body.ToString(),
+                        show_content ? p.Content.Body.ToString() : string.Empty,
                         new Uri(MvcApplication.Domain + "/" + p.Title),
                         url,
                         p.Modified
